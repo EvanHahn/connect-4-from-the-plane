@@ -18,8 +18,13 @@ var handleBoardClick = function (event) {
   var $td = event.target
   if ($td.tagName !== 'TD') { return }
 
-  var row = $td.dataset.row
-  var col = $td.dataset.col
+  var row = parseInt($td.dataset.row, 10)
+  var col = parseInt($td.dataset.col, 10)
+
+  if (state.board[row][col] !== undefined) { return }
+  for (var y = row + 1; y < BOARD_HEIGHT; y++) {
+    if (state.board[y][col] === undefined) { return }
+  }
 
   state.board[row][col] = state.currentTurn
 
