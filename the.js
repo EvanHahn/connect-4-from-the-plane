@@ -4,7 +4,7 @@ var BOARD_HEIGHT = 5
 var crel = document.createElement.bind(document)
 
 var state = {}
-var $board
+var $board, $tds
 
 var emptyBoard = function emptyBoard () {
   var result = []
@@ -12,6 +12,21 @@ var emptyBoard = function emptyBoard () {
     result.push(Array(BOARD_WIDTH))
   }
   return result
+}
+
+var handleBoardClick = function (event) {
+  var $td = event.target
+  if ($td.tagName !== 'TD') { return }
+
+  var row = $td.dataset.row
+  var col = $td.dataset.col
+
+  state.board[row][col] = state.currentTurn
+
+  setState({
+    board: state.board,
+    currentTurn: !state.currentTurn
+  })
 }
 
 var initialRender = (function () {
@@ -23,6 +38,8 @@ var initialRender = (function () {
 
     $board = crel('table')
     $board.className = 'board'
+
+    $tds = emptyBoard()
 
     for (var row = 0; row < BOARD_HEIGHT; row++) {
       var $tr = crel('tr')
@@ -36,9 +53,13 @@ var initialRender = (function () {
         $td.appendChild($circle)
 
         $tr.appendChild($td)
+
+        $tds[row][col] = $td
       }
       $board.appendChild($tr)
     }
+
+    $board.addEventListener('click', handleBoardClick, false)
 
     document.body.appendChild($board)
   }
@@ -47,8 +68,15 @@ var initialRender = (function () {
 var render = function render () {
   initialRender()
 
-  $board.classList.toggle('player-true', state.currentTurn)
-  $board.classList.toggle('player-false', !state.currentTurn)
+  for (var row = 0; row < BOARD_HEIGHT; row++) {
+    for (var col = 0; col < BOARD_WIDTH; col++) {
+      var $td = $tds[row][col]
+
+      $td.classList.toggle('placed', typeof state.board[row][col] === 'boolean')
+      $td.classList.toggle('player-true', state.board[row][col] === true)
+      $td.classList.toggle('player-false', state.board[row][col] === false)
+    }
+  }
 }
 
 var setState = function setState (s) {
@@ -61,6 +89,6 @@ var setState = function setState (s) {
 }
 
 setState({
-  board: emptyBoard,
+  board: emptyBoard(),
   currentTurn: false
 })

@@ -37,3 +37,11 @@ body {
 .player-false .circle {
   background-color: seagreen;
 }
+
+.board td .circle {
+  visibility: hidden;
+}
+
+.board td.placed .circle {
+  visibility: visible;
+}
