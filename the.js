@@ -46,6 +46,9 @@ var initialRender = (function () {
 
 var render = function render () {
   initialRender()
+
+  $board.classList.toggle('player-true', state.currentTurn)
+  $board.classList.toggle('player-false', !state.currentTurn)
 }
 
 var setState = function setState (s) {
