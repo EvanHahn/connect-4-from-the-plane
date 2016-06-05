@@ -1,5 +1,5 @@
 var BOARD_WIDTH = 7
-var BOARD_HEIGHT = BOARD_WIDTH
+var BOARD_HEIGHT = 6
 
 var crel = document.createElement.bind(document)
 
